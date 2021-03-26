@@ -48,23 +48,45 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
+          child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          botao("Adiconar", AppConsts.greenBasic, Icons.add),
+          botao("Remover", AppConsts.redBasic, Icons.add),
+          botao("Editar", AppConsts.yellowBasic, Icons.add),
+        ],
+      )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget botao(String titulo, Color cor, IconData icone) {
+    return GestureDetector(
+      onTap: () => print(titulo),
+      child: Padding(
+        padding: EdgeInsets.all(setHeight(8)),
         child: Container(
           width: setHeight(300),
           height: setHeight(70),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppConsts.cornflower,
+            color: cor,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'adicionar',
+                titulo,
                 style: TextStyle(color: AppConsts.textOnPrimary, fontSize: 30.0),
               ),
               Icon(
-                Icons.add,
+                icone,
                 color: AppConsts.textOnPrimary,
                 size: 60.0,
               ),
@@ -72,11 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
