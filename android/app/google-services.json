@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "861155472747",
+    "project_id": "smart-home-usf",
+    "storage_bucket": "smart-home-usf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861155472747:android:94b370a34badf20852482e",
+        "android_client_info": {
+          "package_name": "com.example.smart_home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861155472747-cfsq2djnbva99dl1h64uq7oc2acgur4v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smart_home",
+            "certificate_hash": "0d5912572bbbfed5ceceac51e1d924d886fc8d9e"
+          }
+        },
+        {
+          "client_id": "861155472747-35tuq3inak1rdpg529eqqdi81rhcidsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPBOiv3S2l6QGcEiVzb66uhw_Pi8SqNQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861155472747-35tuq3inak1rdpg529eqqdi81rhcidsn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
