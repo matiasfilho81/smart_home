@@ -1,6 +1,6 @@
 # smart_home
 
-autores 
+autor
 
 A new Flutter project.
 
