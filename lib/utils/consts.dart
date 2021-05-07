@@ -24,6 +24,8 @@ class AppConsts {
     widthPercentage = widthSize / xdWidhtSize;
   }
 
+  static int radiusBotton = 50;
+
   static Color backgroundColor = const Color(0xffffffff);
   static Color altBackgroundColor = const Color(0xffdddde5);
   static Color backgroundColorOpacity70 = const Color(0xb3eeeeff);

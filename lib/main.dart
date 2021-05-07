@@ -32,6 +32,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  List<bool> _list = [true, false, true, false];
+  List<String> _list2 = ["cozinha", "quarto", "geladeira", "fogao"];
+
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -48,35 +51,46 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Container(
-          width: setHeight(300),
-          height: setHeight(70),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: AppConsts.cornflower,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                'adicionar',
-                style: TextStyle(color: AppConsts.textOnPrimary, fontSize: 30.0),
-              ),
-              Icon(
-                Icons.add,
-                color: AppConsts.textOnPrimary,
-                size: 60.0,
-              ),
-            ],
-          ),
-        ),
+        child: ListView(children: _buildButtons()),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  List<Widget> _buildButtons() {
+    List<Widget> listButtons = List.generate(_list.length, (i) {
+      return Container(
+        height: MediaQuery.of(context).size.height / 5,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(setHeight(8)),
+              child: Container(
+                width: setWidth(300),
+                height: setHeight(50),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                  color: _list[i] ? AppConsts.yellowBasic : AppConsts.blurple,
+                  onPressed: () {
+                    setState(() {
+                      _list[i] = !_list[i];
+                    });
+                  },
+                  child: Text("${_list2[i]} status: ${_list[i]}"),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+    return listButtons;
   }
 }
