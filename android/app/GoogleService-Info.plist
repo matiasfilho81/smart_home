@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>453503077460-3gd59l2teu5pem6ln93p2ct9o32lblft.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.453503077460-3gd59l2teu5pem6ln93p2ct9o32lblft</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD86oOI37ZZl7pjnxoRcc1kQkdu0A5JysY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>453503077460</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.usf.smarthome</string>
+	<key>PROJECT_ID</key>
+	<string>smarthomeusf</string>
+	<key>STORAGE_BUCKET</key>
+	<string>smarthomeusf.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:453503077460:ios:b2af17864a895603a4b1c1</string>
+</dict>
+</plist>
