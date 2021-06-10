@@ -10,11 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // testar funcionamento
-    // Firestore.instance.collection('switch').getDocuments().then((QuerySnapshot querySnapshot) {
-    //   querySnapshot.documents.forEach((doc) {
-    //     print(doc["description"]);
-    //   });
-    // });
+    Firestore.instance.collection('data').getDocuments().then((QuerySnapshot querySnapshot) {
+      querySnapshot.documents.forEach((doc) {
+        print(doc["humidity"]);
+      });
+    });
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

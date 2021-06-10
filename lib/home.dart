@@ -1,18 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home/utils/common.dart';
+import 'package:smart_home/utils/consts.dart';
 
 class MyHomePage extends StatelessWidget {
   static String tag = '/home';
+  static String humidade = '95%';
+
+  // static String humidity;
   @override
   Widget build(BuildContext context) {
+    AppConsts.setWidhtSize(MediaQuery.of(context).size.width);
+    AppConsts.setHeightSize(MediaQuery.of(context).size.height);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Smart House"),
+        backgroundColor: AppConsts.primaryColorOpacity50,
       ),
       body: Column(
         children: [
           Container(
-            height: 200,
+            height: setHeight(400),
             child: sensores(),
           ),
           monitor(),
@@ -20,7 +29,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          var myData = {'description': "teste", 'status': false};
+          var myData = {'description': "Quarto", 'status': true};
 
           var collection = Firestore.instance.collection('switch');
           collection
@@ -58,15 +67,15 @@ class MyHomePage extends StatelessWidget {
             Map<String, dynamic> data = snapshot.data.documents[i].data;
 
             return Container(
+              height: setHeight(64.0),
               margin: EdgeInsets.all(15.0),
               padding: EdgeInsets.all(3.0),
-              decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
-              child: Column(
-                children: [
-                  Text(data['description'].toString()),
-                  Text(data['status'].toString()),
-                ],
-              ),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1.0, color: AppConsts.black),
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                  color:
+                      data['status'] ? AppConsts.textOnPrimary : AppConsts.primaryColorOpacity50),
+              child: Center(child: Text(data['description'])),
             );
           },
         );
@@ -75,22 +84,25 @@ class MyHomePage extends StatelessWidget {
   }
 
   Widget monitor() {
-    return SizedBox(
-      child: Card(
-        elevation: 20,
-        child: Column(
-          children: [
-            Divider(),
-            ListTile(
-              title: Text('Sensor de Temperatura:', style: TextStyle(fontWeight: FontWeight.w500)),
-              subtitle: Text('temperatura C'),
-              leading: Icon(
-                Icons.toys,
-                color: Colors.blue[500],
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: SizedBox(
+        child: Card(
+          elevation: setHeight(20.0),
+          child: Column(
+            children: [
+              Divider(),
+              ListTile(
+                title: Text('Umidade do Ar', style: TextStyle(fontWeight: FontWeight.w500)),
+                subtitle: Text('95%'),
+                leading: Icon(
+                  Icons.select_all,
+                  color: Colors.blue[500],
+                ),
               ),
-            ),
-            Divider(),
-          ],
+              Divider(),
+            ],
+          ),
         ),
       ),
     );
