@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "453503077460",
+    "firebase_url": "https://smarthomeusf-default-rtdb.firebaseio.com",
+    "project_id": "smarthomeusf",
+    "storage_bucket": "smarthomeusf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453503077460:android:80512c14cc2fe54fa4b1c1",
+        "android_client_info": {
+          "package_name": "com.usf.smarthome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453503077460-8ioii1no2oemapj5uqfm70huel91v318.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjiAnN1p1-AwiQVJMhuTY4uef_OTQwD1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453503077460-8ioii1no2oemapj5uqfm70huel91v318.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "453503077460-3gd59l2teu5pem6ln93p2ct9o32lblft.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.usf.smarthome"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

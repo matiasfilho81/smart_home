@@ -1,3 +1,5 @@
+// arquivo common do projeto
+
 import 'consts.dart';
 
 double setWidth(double value) {
