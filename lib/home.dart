@@ -1,19 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:smart_home/utils/common.dart';
 import 'package:smart_home/utils/consts.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   static String tag = '/home';
-  static String humidade = '95%';
+  static String umiade = '95%';
 
+  const MyHomePage({Key key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   // static String humidity;
   @override
   Widget build(BuildContext context) {
+    // testar funcionamento
+    // FirebaseClass.testFirebase();
     AppConsts.setWidhtSize(MediaQuery.of(context).size.width);
     AppConsts.setHeightSize(MediaQuery.of(context).size.height);
 
     return Scaffold(
+      backgroundColor: Colors.black26,
       appBar: AppBar(
         title: Text("Smart House"),
         backgroundColor: AppConsts.primaryColorOpacity50,
@@ -28,28 +39,111 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          var myData = {'description': "Quarto", 'status': true};
+        // onPressed: ()
 
-          var collection = Firestore.instance.collection('switch');
-          collection
-              .add(myData)
-              .then((_) => print('Added'))
-              .catchError((error) => print('Add failed: $error'));
-        },
+        // {
+        //   var myData = {'description': "Quarto", 'status': true};
+
+        //   var collection = Firestore.instance.collection('switch');
+        //   collection
+        //       .add(myData)
+        //       .then((_) => print('Added'))
+        //       .catchError((error) => print('Add failed: $error'));
+        // },
+        onPressed: () => modalCreate(context),
         tooltip: 'Adicionar Agenda',
         child: Icon(Icons.add),
       ),
     );
   }
 
+  modalCreate(BuildContext context) {
+    var form = GlobalKey<FormState>();
+
+    var titulo = TextEditingController();
+    var descricao = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Adicionar novo dispositivo'),
+          content: Form(
+            key: form,
+            child: Container(
+              height: MediaQuery.of(context).size.height / 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Nome do dispositivo'),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Lâmpada da Sala',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    controller: titulo,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Este campo não pode ser vazio.';
+                      }
+                      return null;
+                    },
+                  ),
+               
+                  Text('Descrição'),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: '(Opcional)',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    controller: descricao,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancelar'),
+            ),
+            FlatButton(
+              onPressed: () async {
+                if (form.currentState.validate()) {
+                  await Firestore.instance.collection('switch').add({
+                    'title': titulo.text,
+                    'description': descricao.text,
+                    'status': false,
+                    'data': Timestamp.now(),
+                    'delete': false,
+                  });
+
+                  Navigator.of(context).pop();
+                }
+              },
+              color: Colors.green,
+              child: Text('Salvar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget sensores() {
+    Stream<QuerySnapshot> snapshots = Firestore.instance
+        .collection('switch')
+        //.where('excluido', isEqualTo: false)
+        //.orderBy('data')
+        .snapshots();
+
     return StreamBuilder(
-      stream: Firestore.instance.collection('switch').snapshots(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<QuerySnapshot> snapshot,
-      ) {
+      stream: snapshots,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
@@ -64,22 +158,54 @@ class MyHomePage extends StatelessWidget {
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           itemBuilder: (BuildContext context, int i) {
-            Map<String, dynamic> data = snapshot.data.documents[i].data;
-
-            return Container(
-              height: setHeight(64.0),
-              margin: EdgeInsets.all(15.0),
-              padding: EdgeInsets.all(3.0),
-              decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: AppConsts.black),
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  color:
-                      data['status'] ? AppConsts.textOnPrimary : AppConsts.primaryColorOpacity50),
-              child: Center(child: Text(data['description'])),
-            );
+            return botao(context, i, snapshot);
           },
         );
       },
+    );
+  }
+
+  Widget botao(BuildContext context, int i, AsyncSnapshot<QuerySnapshot> snapshot) {
+    DocumentSnapshot doc = snapshot.data.documents[i];
+    Map<String, dynamic> item = doc.data;
+
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: SizedBox(
+        height: setHeight(92),
+        child: Card(
+          elevation: setHeight(20.0),
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  item['description'],
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                subtitle: Text(item['description']),
+                leading: IconButton(
+                  icon: Icon(
+                    item['status'] ? Icons.check_circle : Icons.check_circle_outline,
+                    color: Colors.blue[500],
+                  ),
+                  onPressed: () => doc.reference.updateData({
+                    'status': !item['status'],
+                  }),
+                ),
+                trailing: IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.blue[500],
+                  ),
+                  onPressed: () => doc.reference.updateData({
+                    'excluido': true,
+                  }),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -91,16 +217,16 @@ class MyHomePage extends StatelessWidget {
           elevation: setHeight(20.0),
           child: Column(
             children: [
-              Divider(),
+              // Divider(),
               ListTile(
                 title: Text('Umidade do Ar', style: TextStyle(fontWeight: FontWeight.w500)),
                 subtitle: Text('95%'),
-                leading: Icon(
-                  Icons.select_all,
-                  color: Colors.blue[500],
+                leading: Image.asset(
+                  "lib/assets/png/64x64/cold.eps",
+                  width: setWidth(170),
                 ),
               ),
-              Divider(),
+              // Divider(),
             ],
           ),
         ),
