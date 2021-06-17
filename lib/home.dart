@@ -29,27 +29,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("Smart House"),
         backgroundColor: AppConsts.primaryColorOpacity50,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Container(
-            height: setHeight(400),
-            child: sensores(),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: setHeight(400),
+                  child: sensores(),
+                ),
+                monitor(),
+              ],
+            ),
           ),
-          monitor(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        // onPressed: ()
-
-        // {
-        //   var myData = {'description': "Quarto", 'status': true};
-
-        //   var collection = Firestore.instance.collection('switch');
-        //   collection
-        //       .add(myData)
-        //       .then((_) => print('Added'))
-        //       .catchError((error) => print('Add failed: $error'));
-        // },
         onPressed: () => modalCreate(context),
         tooltip: 'Adicionar Agenda',
         child: Icon(Icons.add),
@@ -59,76 +54,75 @@ class _MyHomePageState extends State<MyHomePage> {
 
   modalCreate(BuildContext context) {
     var form = GlobalKey<FormState>();
-
     var titulo = TextEditingController();
     var descricao = TextEditingController();
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Adicionar novo dispositivo'),
-          content: Form(
-            key: form,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Nome do dispositivo'),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'Lâmpada da Sala',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+        return SingleChildScrollView(
+          child: AlertDialog(
+            title: Text('Adicionar novo dispositivo'),
+            content: Form(
+              key: form,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Nome do dispositivo'),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Lâmpada da Sala',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
+                      controller: titulo,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Este campo não pode ser vazio.';
+                        }
+                        return null;
+                      },
                     ),
-                    controller: titulo,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Este campo não pode ser vazio.';
-                      }
-                      return null;
-                    },
-                  ),
-               
-                  Text('Descrição'),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: '(Opcional)',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                    Text('Descrição'),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: '(Opcional)',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
+                      controller: descricao,
                     ),
-                    controller: descricao,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Cancelar'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  if (form.currentState.validate()) {
+                    await Firestore.instance.collection('switch').add({
+                      'title': titulo.text,
+                      'description': descricao.text,
+                      'status': false,
+                      'data': Timestamp.now(),
+                      'delete': false,
+                    });
+                    Navigator.of(context).pop();
+                  }
+                },
+                color: Colors.green,
+                child: Text('Salvar'),
+              ),
+            ],
           ),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancelar'),
-            ),
-            FlatButton(
-              onPressed: () async {
-                if (form.currentState.validate()) {
-                  await Firestore.instance.collection('switch').add({
-                    'title': titulo.text,
-                    'description': descricao.text,
-                    'status': false,
-                    'data': Timestamp.now(),
-                    'delete': false,
-                  });
-
-                  Navigator.of(context).pop();
-                }
-              },
-              color: Colors.green,
-              child: Text('Salvar'),
-            ),
-          ],
         );
       },
     );
@@ -137,8 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget sensores() {
     Stream<QuerySnapshot> snapshots = Firestore.instance
         .collection('switch')
-        //.where('excluido', isEqualTo: false)
-        //.orderBy('data')
+        .where('status', isEqualTo: false)
+        // .orderBy('data')
         .snapshots();
 
     return StreamBuilder(
@@ -152,7 +146,11 @@ class _MyHomePageState extends State<MyHomePage> {
         }
 
         if (snapshot.data.documents.length == 0) {
-          return Center(child: Text('Vazio'));
+          return Center(
+              child: Text(
+            'Vazio',
+            style: TextStyle(color: Colors.white),
+          ));
         }
 
         return ListView.builder(
@@ -178,10 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               ListTile(
-                title: Text(
-                  item['description'],
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
+                title: Text(item['title'], style: TextStyle(fontWeight: FontWeight.w500)),
                 subtitle: Text(item['description']),
                 leading: IconButton(
                   icon: Icon(
@@ -198,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.blue[500],
                   ),
                   onPressed: () => doc.reference.updateData({
-                    'excluido': true,
+                    'status': true,
                   }),
                 ),
               ),
