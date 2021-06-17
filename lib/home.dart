@@ -35,12 +35,12 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: [
                 Container(
-                  height: setHeight(400),
-                  child: sensores(),
+                  height: setHeight(350),
+                  child: dispositivos(),
                 ),
                 Container(
-                  height: setHeight(200),
-                  child: monitor(),
+                  height: setHeight(250),
+                  child: sensores(),
                 ),
               ],
             ),
@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget sensores() {
+  Widget dispositivos() {
     Stream<QuerySnapshot> snapshots = Firestore.instance
         .collection('switch')
         .where('delete', isEqualTo: false)
@@ -159,23 +159,23 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           itemBuilder: (BuildContext context, int i) {
-            return botao(context, i, snapshot);
+            return cardDispositivos(context, i, snapshot);
           },
         );
       },
     );
   }
 
-  Widget botao(BuildContext context, int i, AsyncSnapshot<QuerySnapshot> snapshot) {
+  Widget cardDispositivos(BuildContext context, int i, AsyncSnapshot<QuerySnapshot> snapshot) {
     DocumentSnapshot doc = snapshot.data.documents[i];
     Map<String, dynamic> item = doc.data;
 
     return Padding(
       padding: EdgeInsets.all(15.0),
       child: SizedBox(
-        height: setHeight(92),
+        height: setHeight(90),
         child: Card(
-          elevation: setHeight(20.0),
+          elevation: setHeight(10.0),
           child: Column(
             children: [
               ListTile(
@@ -183,8 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 subtitle: Text(item['description']),
                 leading: IconButton(
                   icon: Icon(
-                    item['status'] ? Icons.check_circle : Icons.check_circle_outline,
-                    color: Colors.blue[500],
+                    item['status'] ? Icons.check_box : Icons.check,
                   ),
                   onPressed: () => doc.reference.updateData({
                     'status': !item['status'],
@@ -193,7 +192,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 trailing: IconButton(
                   icon: Icon(
                     Icons.delete,
-                    color: Colors.blue[500],
                   ),
                   onPressed: () => doc.reference.updateData({
                     'delete': true,
@@ -207,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget monitor() {
+  Widget sensores() {
     Stream<QuerySnapshot> snap = Firestore.instance.collection('data').snapshots();
 
     return StreamBuilder(
@@ -231,28 +229,31 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListView.builder(
           itemCount: snap.data.documents.length,
           itemBuilder: (BuildContext context, int i) {
-            return dado(context, i, snap);
+            return cardSensores(context, i, snap);
           },
         );
       },
     );
   }
 
-  Widget dado(BuildContext context, int i, AsyncSnapshot<QuerySnapshot> snapshot) {
+  Widget cardSensores(BuildContext context, int i, AsyncSnapshot<QuerySnapshot> snapshot) {
     DocumentSnapshot doc = snapshot.data.documents[i];
     Map<String, dynamic> item = doc.data;
 
     return Padding(
       padding: EdgeInsets.all(15.0),
       child: SizedBox(
-        height: setHeight(92),
+        height: setHeight(80),
         child: Card(
-          elevation: setHeight(20.0),
+          elevation: setHeight(10.0),
           child: Column(
             children: [
               ListTile(
+                leading: Image.asset(
+                  "lib/assets/" + item['path'] + ".png",
+                ),
                 title: Text(item['title'], style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text(item['valor']),
+                subtitle: Text(item['valor'] + item['unit']),
               ),
             ],
           ),
@@ -260,26 +261,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  // Widget monitor() {
-  //   return Padding(
-  //     padding: EdgeInsets.all(15.0),
-  //     child: SizedBox(
-  //       child: Card(
-  //         elevation: setHeight(20.0),
-  //         child: Column(
-  //           children: [
-  //             ListTile(
-  //               title: Text('Umidade do Ar', style: TextStyle(fontWeight: FontWeight.w500)),
-  //               subtitle: Text('95%'),
-  //               leading: Image.asset(
-  //                 "lib/assets/cold.eps",
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
