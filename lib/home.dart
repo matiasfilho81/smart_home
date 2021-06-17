@@ -38,7 +38,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: setHeight(400),
                   child: sensores(),
                 ),
-                monitor(),
+                Container(
+                  height: setHeight(200),
+                  child: monitor(),
+                ),
               ],
             ),
           ),
@@ -131,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget sensores() {
     Stream<QuerySnapshot> snapshots = Firestore.instance
         .collection('switch')
-        .where('status', isEqualTo: false)
+        .where('delete', isEqualTo: false)
         // .orderBy('data')
         .snapshots();
 
@@ -193,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.blue[500],
                   ),
                   onPressed: () => doc.reference.updateData({
-                    'status': true,
+                    'delete': true,
                   }),
                 ),
               ),
@@ -205,27 +208,78 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget monitor() {
+    Stream<QuerySnapshot> snap = Firestore.instance.collection('data').snapshots();
+
+    return StreamBuilder(
+      stream: snap,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+        if (snap.hasError) {
+          return Center(child: Text('Error: ${snap.error}'));
+        }
+        if (snap.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (snap.data.documents.length == 0) {
+          return Center(
+              child: Text(
+            'Vazio',
+            style: TextStyle(color: Colors.white),
+          ));
+        }
+
+        return ListView.builder(
+          itemCount: snap.data.documents.length,
+          itemBuilder: (BuildContext context, int i) {
+            return dado(context, i, snap);
+          },
+        );
+      },
+    );
+  }
+
+  Widget dado(BuildContext context, int i, AsyncSnapshot<QuerySnapshot> snapshot) {
+    DocumentSnapshot doc = snapshot.data.documents[i];
+    Map<String, dynamic> item = doc.data;
+
     return Padding(
       padding: EdgeInsets.all(15.0),
       child: SizedBox(
+        height: setHeight(92),
         child: Card(
           elevation: setHeight(20.0),
           child: Column(
             children: [
-              // Divider(),
               ListTile(
-                title: Text('Umidade do Ar', style: TextStyle(fontWeight: FontWeight.w500)),
-                subtitle: Text('95%'),
-                leading: Image.asset(
-                  "lib/assets/png/64x64/cold.eps",
-                  width: setWidth(170),
-                ),
+                title: Text(item['title'], style: TextStyle(fontWeight: FontWeight.w500)),
+                subtitle: Text(item['valor']),
               ),
-              // Divider(),
             ],
           ),
         ),
       ),
     );
   }
+
+  // Widget monitor() {
+  //   return Padding(
+  //     padding: EdgeInsets.all(15.0),
+  //     child: SizedBox(
+  //       child: Card(
+  //         elevation: setHeight(20.0),
+  //         child: Column(
+  //           children: [
+  //             ListTile(
+  //               title: Text('Umidade do Ar', style: TextStyle(fontWeight: FontWeight.w500)),
+  //               subtitle: Text('95%'),
+  //               leading: Image.asset(
+  //                 "lib/assets/cold.eps",
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
