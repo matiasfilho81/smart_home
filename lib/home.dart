@@ -15,19 +15,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // static String humidity;
   @override
   Widget build(BuildContext context) {
-    // testar funcionamento
-    // FirebaseClass.testFirebase();
     AppConsts.setWidhtSize(MediaQuery.of(context).size.width);
     AppConsts.setHeightSize(MediaQuery.of(context).size.height);
 
     return Scaffold(
-      backgroundColor: Colors.black26,
+      backgroundColor: AppConsts.backgroundColor,
       appBar: AppBar(
-        title: Text("Smart House"),
-        backgroundColor: AppConsts.primaryColorOpacity50,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "lib/assets/plug.png",
+              color: Colors.white,
+              fit: BoxFit.contain,
+              height: 32,
+            ),
+            Container(
+              padding: EdgeInsets.all(8.0),
+              child: Text('Smart Home'),
+            )
+          ],
+        ),
+        backgroundColor: AppConsts.appbarBackgroundColor,
       ),
       body: Stack(
         children: [
@@ -173,8 +184,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Padding(
       padding: EdgeInsets.all(15.0),
       child: SizedBox(
-        height: setHeight(90),
+        height: setHeight(80),
         child: Card(
+          color: item['status'] ? AppConsts.onBottom : AppConsts.offBottom,
           elevation: setHeight(10.0),
           child: Column(
             children: [
@@ -183,7 +195,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 subtitle: Text(item['description']),
                 leading: IconButton(
                   icon: Icon(
-                    item['status'] ? Icons.check_box : Icons.check,
+                    Icons.lightbulb,
+                    color: item['status'] ? AppConsts.onColor : AppConsts.offColor,
                   ),
                   onPressed: () => doc.reference.updateData({
                     'status': !item['status'],
