@@ -46,10 +46,12 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: [
                 Container(
+                  color: Colors.pink,
                   height: setHeight(350),
                   child: dispositivos(),
                 ),
                 Container(
+                  color: Colors.amber,
                   height: setHeight(250),
                   child: sensores(),
                 ),

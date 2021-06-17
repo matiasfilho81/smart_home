@@ -30,8 +30,8 @@ class AppConsts {
   static Color appbarBackgroundColor = const Color(0xff484848);
   static Color onColor = const Color(0xff7b6cf6);
   static Color offColor = const Color(0xff484848);
-  static Color onBottom = const Color(0xffffffff);
-  static Color offBottom = const Color(0xffffffdd);
+  static Color onBottom = const Color(0xffffffdd);
+  static Color offBottom = const Color(0xffffdddd);
   static Color onText = const Color(0xffffffff);
   static Color offText = const Color(0xffffffdd);
   static Color backgroundColorOpacity70 = const Color(0xb3eeeeff);
