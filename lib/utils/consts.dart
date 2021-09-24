@@ -24,30 +24,28 @@ class AppConsts {
     widthPercentage = widthSize / xdWidhtSize;
   }
 
-  static int radiusBotton = 50;
+  static double radiusBotton = 50;
+
+  // Back Ground Colors
 
   static Color backgroundColor = const Color(0xff484848);
   static Color appbarBackgroundColor = const Color(0xff484848);
+
+  // Cores básicas
+
+  static Color redBasic = const Color(0xffcf0305);
+  static Color yellowBasic = const Color(0xffffff00);
+  static Color greenBasic = const Color(0xff00ff00);
+  static Color borderColor = Colors.black26;
+  static Color black = const Color(0xff000000);
+
+  // ON/OFF
   static Color onColor = const Color(0xff7b6cf6);
   static Color offColor = const Color(0xff484848);
   static Color onBottom = const Color(0xffffffdd);
   static Color offBottom = const Color(0xffffdddd);
   static Color onText = const Color(0xffffffff);
   static Color offText = const Color(0xffffffdd);
-  static Color backgroundColorOpacity70 = const Color(0xb3eeeeff);
-  static Color primaryColor = const Color(0xff46649C);
-  static Color primaryColorOpacity12 = const Color(0x1f46649C);
-  static Color primaryColorOpacity50 = const Color(0x8046649C);
-  static Color textOnPrimary = const Color(0xffffffff);
-  static Color textOnBackground = const Color(0xff46649C);
-  static Color blurple = const Color(0xaf46649C);
-  static Color disabledColor = const Color(0xff484848);
-  static Color cornflower = const Color(0xff7b6cf6);
-  static Color redBasic = const Color(0xffcf0305);
-  static Color yellowBasic = const Color(0xffffff00);
-  static Color greenBasic = const Color(0xff00ff00);
-  static Color borderColor = Colors.black26;
-  static Color black = const Color(0xff000000);
 
   static double fontSize08 = setWidth(8.0);
   static double fontSize09 = setWidth(9.0);
@@ -58,4 +56,6 @@ class AppConsts {
     fontWeight: FontWeight.w600,
     fontSize: AppConsts.fontSize10,
   );
+
+  static double topHeight = 10.0;
 }
